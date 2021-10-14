@@ -3,11 +3,12 @@
 
 from PIL import Image
 
+
 def to_greyscale(pixel: tuple) -> tuple:
     """Convert a pixel to greyscale.
 
     Args:
-        pixel: a 3-tuple fo ints from
+        pixel: a 3-tuple of ints from
             0 - 255, e.g. (140, 120, 255)
             represents (red, green blue)
 
@@ -15,7 +16,6 @@ def to_greyscale(pixel: tuple) -> tuple:
         a 3-tuple pixel (r, g, b) in
         greyscale
     """
-
 
     # grab r, g, b
     red, green, blue = pixel
@@ -27,6 +27,24 @@ def to_greyscale(pixel: tuple) -> tuple:
     grey_pixel = (average, average, average)
 
     return average, average, average
+
+
+def to_greyscale_luma(pixel: tuple) -> tuple:
+    """Convert to greyscale using luma algorithm
+    Args:
+        pixel: a 3-tuple of ints from
+            0 - 255, e.g. (140, 120, 255)
+            represents (red, green blue)
+
+    Returns:
+        a 3-tuple pixel (r, g, b) in
+        greyscale
+    """
+    red, green, blue = pixel
+
+    grey = int(red * 0.3 + green * 0.59 + blue * 0.11)
+
+    return grey, grey, grey
 
 # Load the image (pumpkin)
 # Open an output image that's the same size
@@ -55,12 +73,12 @@ for y in range(image_height):
         # Grab pixel information for THIS pixel
         pixel = image.getpixel((x, y))
 
-        grey_pixel = to_greyscale
+        grey_pixel = to_greyscale_luma(pixel)
 
         # put that in the new image
         output_image.putpixel((x, y), grey_pixel)
 
-output_image.save('grayscale.jpg')
+output_image.save('grayscale_luma.jpg')
         #print(f"\nPixel Location: {x}, {y}")
         # Print pixel values
         #print(f"red: {pixel[0]}")
