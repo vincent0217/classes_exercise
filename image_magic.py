@@ -4,13 +4,19 @@
 from PIL import Image
 
 
-def to_greyscale(pixel: tuple) -> tuple:
+def to_greyscale(pixel: tuple, algo="average") -> tuple:
     """Convert a pixel to greyscale.
+    Can also specify the greyscale algorithm.
+    Default to average
 
     Args:
         pixel: a 3-tuple of ints from
             0 - 255, e.g. (140, 120, 255)
             represents (red, green blue)
+        algo: the greyscale conversion algorithm
+              specified by the user
+              valid values are "average", "luma"
+              defaults to "average"
 
     Returns:
         a 3-tuple pixel (r, g, b) in
@@ -21,30 +27,30 @@ def to_greyscale(pixel: tuple) -> tuple:
     red, green, blue = pixel
 
     # calculate the average
-    average = int((red + green + blue) / 3)
-
-    # create a gray pixel
-    grey_pixel = (average, average, average)
-
-    return average, average, average
-
-
-def to_greyscale_luma(pixel: tuple) -> tuple:
-    """Convert to greyscale using luma algorithm
-    Args:
-        pixel: a 3-tuple of ints from
-            0 - 255, e.g. (140, 120, 255)
-            represents (red, green blue)
-
-    Returns:
-        a 3-tuple pixel (r, g, b) in
-        greyscale
-    """
-    red, green, blue = pixel
-
-    grey = int(red * 0.3 + green * 0.59 + blue * 0.11)
+    if algo.lower() == "luma":
+        grey = int(red * 0.3 + green * 0.59 + blue * 0.11)
+    else:
+        grey = int((red + green +blue) / 3)
 
     return grey, grey, grey
+
+
+#def to_greyscale_luma(pixel: tuple) -> tuple:
+#    """Convert to greyscale using luma algorithm
+#    Args:
+#        pixel: a 3-tuple of ints from
+#            0 - 255, e.g. (140, 120, 255)
+#            represents (red, green blue)
+#
+#    Returns:
+#        a 3-tuple pixel (r, g, b) in
+#        greyscale
+#    """
+#    red, green, blue = pixel
+#
+#    grey = int(red * 0.3 + green * 0.59 + blue * 0.11)
+#
+#    return grey, grey, grey
 
 # Load the image (pumpkin)
 # Open an output image that's the same size
@@ -73,12 +79,12 @@ for y in range(image_height):
         # Grab pixel information for THIS pixel
         pixel = image.getpixel((x, y))
 
-        grey_pixel = to_greyscale_luma(pixel)
+        grey_pixel = to_greyscale(pixel, "average")
 
         # put that in the new image
         output_image.putpixel((x, y), grey_pixel)
 
-output_image.save('grayscale_luma.jpg')
+output_image.save('grayscale_luma2.jpg')
         #print(f"\nPixel Location: {x}, {y}")
         # Print pixel values
         #print(f"red: {pixel[0]}")
