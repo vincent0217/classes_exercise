@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cf6c0386-2b5d-4b64-af8b-a98bb2788b94" name="Changes" comment="Inserted luma function to highlight yellow colours in greyscale">
+    <list default="true" id="cf6c0386-2b5d-4b64-af8b-a98bb2788b94" name="Changes" comment="Refactored greyscale">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/image_magic.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_magic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634236763268</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Refactored greyscale">
+      <created>1634238958496</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1634238958496</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -126,6 +134,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="Inserted luma function to highlight yellow colours in greyscale" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inserted luma function to highlight yellow colours in greyscale" />
+    <MESSAGE value="Refactored greyscale" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored greyscale" />
   </component>
 </project>

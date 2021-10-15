@@ -35,7 +35,42 @@ def to_greyscale(pixel: tuple, algo="average") -> tuple:
     return grey, grey, grey
 
 
-#def to_greyscale_luma(pixel: tuple) -> tuple:
+def brighter(pixel: tuple) -> tuple:
+    """Increase the brightness of a pixel
+
+    Args:
+        pixel: a 3-tuple of (red, green, blue)
+            subpixels
+
+    Returns:
+        a 3-tuple representing a brighter pixel
+    """
+    # break down the pixel into subpixels
+    red = pixel[0]
+    green = pixel[1]
+    blue = pixel[2]
+
+    # increase the value by some number
+    if red + 25 > 255:
+        red = 255
+    else:
+        red += 25
+
+    if green + 25 > 255:
+        green = 255
+    else:
+        green += 25
+
+    if blue + 25 > 255:
+        blue = 255
+    else:
+        blue += 25
+
+    # return it
+    return red, green, blue
+
+
+# def to_greyscale_luma(pixel: tuple) -> tuple:
 #    """Convert to greyscale using luma algorithm
 #    Args:
 #        pixel: a 3-tuple of ints from
@@ -52,26 +87,26 @@ def to_greyscale(pixel: tuple, algo="average") -> tuple:
 #
 #    return grey, grey, grey
 
-# Load the image (pumpkin)
-# Open an output image that's the same size
+# # Load the image (pumpkin)
+# # Open an output image that's the same size
 image = Image.open('./halloween-unsplash.jpg')
 output_image = Image.open('./halloween-unsplash.jpg')
-
-# Grab pixel information
+#
+# # Grab pixel information
 a_pixel = image.getpixel((0, 0))  # grab pixel (0, 0) top-left
-
+#
 print(a_pixel)
-
-# Iterate over EVERY PIXEL
-# Get dimensions (size) of the image
+#
+# # Iterate over EVERY PIXEL
+# # Get dimensions (size) of the image
 image_width = image.width
 image_height = image.height
-
-# Modify the image to convert it from colour to grayscale
-# ( r, g, b ) --> ( ?, ?, ? )
-# take the r, g, b, add them up and divide by 3
-# replace r, g, b with that AVERAGE value
-
+#
+# # Modify the image to convert it from colour to grayscale
+# # ( r, g, b ) --> ( ?, ?, ? )
+# # take the r, g, b, add them up and divide by 3
+# # replace r, g, b with that AVERAGE value
+#
 # Top to bottom
 for y in range(image_height):
     # Left to right
@@ -79,12 +114,16 @@ for y in range(image_height):
         # Grab pixel information for THIS pixel
         pixel = image.getpixel((x, y))
 
-        grey_pixel = to_greyscale(pixel, "average")
+        # grey_pixel = to_greyscale(pixel, "average")
+        brighter_pixel = brighter(pixel)
 
         # put that in the new image
-        output_image.putpixel((x, y), grey_pixel)
+        # output_image.putpixel((x, y), grey_pixel)
+        output_image.putpixel((x, y), brighter_pixel)
 
-output_image.save('grayscale_luma2.jpg')
+output_image.save('brighter.jpg')
+
+#output_image.save('grayscale_luma2.jpg')
         #print(f"\nPixel Location: {x}, {y}")
         # Print pixel values
         #print(f"red: {pixel[0]}")
