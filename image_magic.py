@@ -35,7 +35,8 @@ def to_greyscale(pixel: tuple, algo="average") -> tuple:
     return grey, grey, grey
 
 
-def brighter(pixel: tuple) -> tuple:
+# def brighter(pixel: tuple) -> tuple:
+def brightness(pixel: tuple, magnitude: int) -> tuple:
     """Increase the brightness of a pixel
 
     Args:
@@ -50,21 +51,30 @@ def brighter(pixel: tuple) -> tuple:
     green = pixel[1]
     blue = pixel[2]
 
-    # increase the value by some number
-    if red + 25 > 255:
-        red = 255
-    else:
-        red += 25
+    MAX = 255
+    MIN = 0
 
-    if green + 25 > 255:
-        green = 255
+    # add the magnitude to the r, g, b values
+    if red + magnitude > MAX:
+        red = MAX
+    elif red + magnitude < MIN:
+        red = MIN
     else:
-        green += 25
+        red += magnitude
 
-    if blue + 25 > 255:
-        blue = 255
+    if green + magnitude > MAX:
+        green = MAX
+    elif green + magnitude < MIN:
+        red = MIN
     else:
-        blue += 25
+        green += magnitude
+
+    if blue + magnitude > MAX:
+        blue = MAX
+    elif blue + magnitude < MIN:
+        red = MIN
+    else:
+        blue += magnitude
 
     # return it
     return red, green, blue
@@ -115,13 +125,13 @@ for y in range(image_height):
         pixel = image.getpixel((x, y))
 
         # grey_pixel = to_greyscale(pixel, "average")
-        brighter_pixel = brighter(pixel)
+        brighter_pixel = brightness(pixel, -100)
 
         # put that in the new image
         # output_image.putpixel((x, y), grey_pixel)
         output_image.putpixel((x, y), brighter_pixel)
 
-output_image.save('brighter.jpg')
+output_image.save('darker.jpg')
 
 #output_image.save('grayscale_luma2.jpg')
         #print(f"\nPixel Location: {x}, {y}")
