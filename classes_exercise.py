@@ -30,7 +30,7 @@ class Vehicle:
     def __init__(self):
         """Creates a new vehicle with default values"""
         self.name = "Mikethebike"
-        self.max_speed = 1000
+        self.max_speed = 10
         self.capacity = 2
 
     def vroom(self) -> str:
@@ -44,7 +44,7 @@ class Bus(Vehicle):
     Attributes:
         rider_age: A float indicating the age
     """
-    def __init__(self, rider_age: float = 90):
+    def __init__(self, rider_age: float = 18):
         """Creates the age of riders"""
         self.rider_age = rider_age
         self.bus_fare = 5
@@ -63,3 +63,4 @@ print(some_vehicle.vroom())
 
 some_bus = Bus()
 print(some_bus.fare())
+
