@@ -16,7 +16,12 @@ GON GETCHU.
 
 CHOICES = """
     --- Your Choices ---
+    D. Stop to refuel the gas
     E. Current Status
     Q. Quit the game
     --- 
+"""
+
+REFUEL = """-------You filled the furl tank.
+-------The agents got closer.
 """
