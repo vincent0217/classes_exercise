@@ -16,6 +16,8 @@ GON GETCHU.
 
 CHOICES = """
     --- Your Choices ---
+    b. Travel slowly ahead
+    C. Speed ahead at full speed
     D. Stop to refuel the gas
     E. Current Status
     Q. Quit the game
@@ -24,4 +26,5 @@ CHOICES = """
 
 REFUEL = """-------You filled the furl tank.
 -------The agents got closer.
+
 """

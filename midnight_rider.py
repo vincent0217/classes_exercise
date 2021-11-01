@@ -12,6 +12,7 @@ import midnight_rider_text
 MAX_TOFU = 3
 MAX_FUEL = 50
 
+
 class Game:
     """Represent our game engine
 
@@ -55,8 +56,41 @@ class Game:
         user_choice = input().lower().strip("?!.,")
 
         # Based on their choice, change the attributes of the class
-        if user_choice == "d":
-            # TODO: Choice D - Refuel or Recharge
+
+        # TODO: Implement eating/hunger
+        agents_distance_now = random.randrange(7, 15)
+        if user_choice == "b":
+            # Move the player
+            player_distance_now = random.randrange(0, 8)
+            self.distance_traveled += player_distance_now
+
+            # Move the agents
+            self.agents_distance += agents_distance_now - player_distance_now
+
+            # Burn the fuel
+            self.fuel -= random.randrange(1, 6)
+
+            # Give the player some feedback
+            print(f"\n-------------Mehhhhhhhhhhhh")
+            print(f"---------------You traveled {player_distance_now} km.")
+
+        # TODO: Implement slow traveling
+        elif user_choice == "c":
+            # Move the player
+            player_distance_now = random.randrange(10, 16)
+            self.distance_traveled += player_distance_now
+
+            # Move the agents
+            self.agents_distance += agents_distance_now - player_distance_now
+
+            # Burn the fuel
+            self.fuel -= random.randrange(5, 11)
+
+            # Give the player some feedback
+            print(f"\n-------------ZOOOOOOOOOOOM")
+            print(f"---------------You traveled {player_distance_now} km.")
+
+        elif user_choice == "d":
             self.fuel = MAX_FUEL
             # Decide how far the agents go
             self.agents_distance += random.randrange(7, 15)
@@ -67,7 +101,7 @@ class Game:
             print("---Status Check---")
             print(f"Distance Traveled: {self.distance_traveled} km")
             print(f"Fuel remaining: {self.fuel} L")
-            print(f"Tofu pieces left: {self.amount_tofu}")
+            print(f"Tofu pieces left: {self.amount_tofu} pieces")
             print(f"Agent's distance: {abs(self.agents_distance)} km behind")
             print("---------------------------------")
             time.sleep(2)
