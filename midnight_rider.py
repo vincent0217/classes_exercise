@@ -13,6 +13,7 @@ MAX_TOFU = 3
 MAX_FUEL = 50
 MAX_HUNGER = 50
 MAX_DISTANCE = 100
+TOFU_REFILL_PERCENTAGE = 0.1  # 100%
 
 ENDGAME_REASONS = {
     "LOSE_AGENTS": 1,
@@ -142,6 +143,14 @@ class Game:
             print(midnight_rider_text.SEVERE_HUNGER)
         elif self.hunger > 25:
             print(midnight_rider_text.HUNGER)
+
+        # A percentage of time, the tofu bag is filled by the dog.
+        if random.random() <= TOFU_REFILL_PERCENTAGE and self.amount_tofu < MAX_TOFU:
+            # refill the tofu
+            self.amount_tofu = MAX_TOFU
+            # display some text
+            time.sleep(1)
+            print(midnight_rider_text.REFILL_TOFU)
 
         time.sleep(1)
 

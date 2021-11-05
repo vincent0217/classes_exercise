@@ -43,6 +43,11 @@ SEVERE_HUNGER = """*******Your stomach rumbles.
 HUNGER = """*******Your hunger is small but manageable.
 """
 
+REFILL_TOFU = """\n*******You look at your tofu container.
+*******It is filled magically.
+*******"You're welcome!" says a small voice.
+*******The dog used its magic tofu cooking skills.\n"""
+
 ENDGAME_TEXT = [
     """The game has ended. Thanks for playing!""",      # Quit the game
 
