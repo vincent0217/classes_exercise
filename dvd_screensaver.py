@@ -13,8 +13,8 @@ GREEN = (  0, 255,   0)
 BLUE  = (  0,   0, 255)
 BGCOLOUR = (100, 100, 255)
 
-SCREEN_WIDTH  = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH  = 960
+SCREEN_HEIGHT = 540
 SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
 WINDOW_TITLE  = "DVD Screen Saver"
 
@@ -86,6 +86,9 @@ def main() -> None:
     done = False
     clock = pygame.time.Clock()
     dvd_image = Dvdimage()
+    bg_image = pygame.image.load('./images/dvd_bg.jpg')
+    # Transform the size of the bg_image
+    bg_image = pygame.transform.scale(bg_image, (980, 540))
 
     # ----------- MAIN LOOP
     while not done:
@@ -99,7 +102,8 @@ def main() -> None:
         print(f"x: {dvd_image.x}, y: {dvd_image.y}")
 
         # ----------- DRAW THE ENVIRONMENT
-        screen.fill(BGCOLOUR)      # fill with bg-color
+        # Draw the background image
+        screen.blit(bg_image, (0, 0))
 
         # .blit(<surface/image>, coords)
         screen.blit(dvd_image.img, (dvd_image.x, dvd_image.y))
