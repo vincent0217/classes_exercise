@@ -2,7 +2,7 @@
 # Author: Vincent
 # 2021 Version
 
-
+import random
 import pygame
 
 pygame.init()
@@ -50,6 +50,7 @@ class Block(pygame.sprite.Sprite):
         # Based on the image, create a Rect for the block
         self.rect = self.image.get_rect()
 
+
 def main() -> None:
     """Driver of the Python script"""
     # Create the screen
@@ -59,9 +60,27 @@ def main() -> None:
     # Create some local variables that describe the environment
     done = False
     clock = pygame.time.Clock()
+    num_blocks = 100
 
-    # Create a group of sprites to store ALL SPRITES
+    pygame.mouse.set_visible(False)
+
+    # Create groups the hold sprites
     all_sprites = pygame.sprite.Group()
+    block_sprites = pygame.sprite.Group()
+
+    # Create all the block sprites and add to the block_sprites
+    for i in range(num_blocks):
+        # Create a block (set its parameters)
+        block = Block(BLACK, 20, 15)
+
+        # Set a random location for the block inside the screen
+        block.rect.x = random.randrange(SCREEN_WIDTH - block.rect.width)
+        block.rect.y = random.randrange(SCREEN_HEIGHT - block.rect.height)
+        # Add the block to the block_sprites Group
+        # ADd the block to the all_sprites Group
+        block_sprites.add(block)
+        all_sprites.add(block)
+
 
     # Create the Player block
     player = Block(ETON_BLUE, 20, 15)
