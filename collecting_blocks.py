@@ -68,6 +68,8 @@ def main() -> None:
     # Add the Player to all_sprites group
     all_sprites.add(player)
 
+    pygame.mouse.set_visible(False)
+
 
     # ----------- MAIN LOOP
     while not done:
@@ -77,6 +79,10 @@ def main() -> None:
                 done = True
 
         # ----------- CHANGE ENVIRONMENT
+        # Process player movement based on mouse pos
+
+        mouse_pos = pygame.mouse.get_pos()
+        player.rect = mouse_pos
 
         # ----------- DRAW THE ENVIRONMENT
         screen.fill(BGCOLOUR)      # fill with bgcolor
