@@ -134,6 +134,9 @@ def main() -> None:
     num_enemies = 10
     score = 0
     start_time = time.time()
+    time_invincible = 5
+
+    font = pygame.font.SysFont("Ariel", 25)
 
     pygame.mouse.set_visible(False)
 
@@ -172,7 +175,6 @@ def main() -> None:
 
     pygame.mouse.set_visible(False)
 
-
     # ----------- MAIN LOOP
     while not done:
         # ----------- EVENT LISTENER
@@ -191,14 +193,32 @@ def main() -> None:
         # Check all collisions between player and the blocks
         blocks_collided = pygame.sprite.spritecollide(player, block_sprites, True)
 
+        # Check all collisions between player and blocks
         for block in blocks_collided:
             score += 1
             print(f"Score: {score}")
+
+        # Check all collisions between player and the enemies
+        enemies_collided = pygame.sprite.spritecollide(player, enemy_sprites, False)
+
+        # Check all collisions between player and enemies
+        print(time.time() - start_time)
+        if time.time() - start_time > time_invincible:
+            for enemy in enemies_collided:
+                done = True
+                print("GAME OVER!")
+
         # ----------- DRAW THE ENVIRONMENT
         screen.fill(BGCOLOUR)      # fill with bgcolor
 
         # Draw all sprites
         all_sprites.draw(screen)
+
+        # Draw score on screen
+        screen.blit(
+            font.render(f"Scoree: {score}", True, BLACK),
+            (5, 5)
+        )
 
         # Update the screen
         pygame.display.flip()
