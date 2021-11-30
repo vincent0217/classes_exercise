@@ -3,8 +3,8 @@
 # 2021 Version
 
 import random
-import pygame
 import time
+import pygame
 
 pygame.init()
 
@@ -17,7 +17,7 @@ ETON_BLUE = (135, 187, 162)
 RAD_RED =   (255,  56, 100)
 BLK_CHOCOLATE = (25, 17, 2)
 
-BGCOLOUR =  WHITE
+BGCOLOUR = WHITE
 
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
@@ -33,6 +33,8 @@ class Player(pygame.sprite.Sprite):
             representation of our Block
         rect: numerical representation of
             our Block [x, y, width, height]
+        hp: describe how much health our
+            player has
     """
     def __init__(self) -> None:
         # Call the superclass constructor
@@ -44,6 +46,13 @@ class Player(pygame.sprite.Sprite):
 
         # Based on the image, create a Rect for the block
         self.rect = self.image.get_rect()
+
+        # Initial health points
+        self.hp = 250
+
+    def hp_remaining(self) -> int:
+        """Return the percent of health remaining"""
+        return self.hp / 250
 
 
 class Block(pygame.sprite.Sprite):
@@ -133,10 +142,10 @@ def main() -> None:
     num_blocks = 100
     num_enemies = 10
     score = 0
-    start_time = time.time()
+    time_start = time.time()
     time_invincible = 5
 
-    font = pygame.font.SysFont("Ariel", 25)
+    font = pygame.font.SysFont("Arial", 25)
 
     pygame.mouse.set_visible(False)
 
@@ -173,7 +182,8 @@ def main() -> None:
     # Add the Player to all_sprites group
     all_sprites.add(player)
 
-    pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(True)
+
 
     # ----------- MAIN LOOP
     while not done:
@@ -185,28 +195,25 @@ def main() -> None:
         # ----------- CHANGE ENVIRONMENT
         # Process player movement based on mouse pos
         mouse_pos = pygame.mouse.get_pos()
-        player.rect.x, player.rect.y = mouse_pos
+        player.rect.x = mouse_pos[0] - player.rect.width / 2
+        player.rect.y = mouse_pos[1] - player.rect.height / 2
 
         # Update the location of all sprites
         all_sprites.update()
 
-        # Check all collisions between player and the blocks
-        blocks_collided = pygame.sprite.spritecollide(player, block_sprites, True)
-
-        # Check all collisions between player and blocks
-        for block in blocks_collided:
-            score += 1
-            print(f"Score: {score}")
-
-        # Check all collisions between player and the enemies
+        # Check all collisions between player and the ENEMIES
         enemies_collided = pygame.sprite.spritecollide(player, enemy_sprites, False)
 
-        # Check all collisions between player and enemies
-        print(time.time() - start_time)
-        if time.time() - start_time > time_invincible:
+        # Set a time for invincibility at the beginning of the game
+        if time.time() - time_start > time_invincible:
             for enemy in enemies_collided:
-                done = True
-                print("GAME OVER!")
+                player.hp -= 1
+
+            # Check all collisions between player and the blocks
+            blocks_collided = pygame.sprite.spritecollide(player, block_sprites, True)
+
+            for block in blocks_collided:
+                score += 1
 
         # ----------- DRAW THE ENVIRONMENT
         screen.fill(BGCOLOUR)      # fill with bgcolor
@@ -214,20 +221,25 @@ def main() -> None:
         # Draw all sprites
         all_sprites.draw(screen)
 
-        # Draw score on screen
+        # Draw the score on the screen
         screen.blit(
-            font.render(f"Scoree: {score}", True, BLACK),
+            font.render(f"Score: {score}", True, BLACK),
             (5, 5)
         )
+
+        # Draw a health bar
+        # Draw the background rectangle
+        pygame.draw.rect(screen, GREEN, [580, 5, 215, 20])
+        # Draw the foreground rectangle which is the remaining health
+        life_remaining = 215 - int(215 * player.hp_remaining())
+        pygame.draw.rect(screen, BLUE, [580, 5, life_remaining, 20])
+
 
         # Update the screen
         pygame.display.flip()
 
         # ----------- CLOCK TICK
         clock.tick(75)
-
-    total_time = time.time() - start_time
-    print(f"Time: {total_time}")
 
 
 if __name__ == "__main__":
