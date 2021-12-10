@@ -22,7 +22,7 @@ BGCOLOUR = WHITE
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
-WINDOW_TITLE  = "Collecing Blocks"
+WINDOW_TITLE  = "Collecting Blocks"
 
 
 class Player(pygame.sprite.Sprite):
@@ -143,11 +143,24 @@ def main() -> None:
     num_enemies = 10
     score = 0
     time_start = time.time()
-    time_invincible = 5
+    time_invincible = 5              # seconds
+    game_state = "running"
+    endgame_cooldown = 5             # seconds
+    time_ended = 0.0
+
+    endgame_messages = {
+        "win": "Congratulations, you won!",
+        "lose": "Sorry, they got you. Play again!",
+    }
 
     font = pygame.font.SysFont("Arial", 25)
 
     pygame.mouse.set_visible(False)
+
+    instructions = "You have a 5 second invincibility period. " \
+                   "Instructions:" \
+                   "avoid hitting the goomba." \
+                   "collect all blocks before hp becomes 0." \
 
     # Create groups to hold Sprites
     all_sprites = pygame.sprite.Group()
@@ -184,12 +197,39 @@ def main() -> None:
 
     pygame.mouse.set_visible(True)
 
-
     # ----------- MAIN LOOP
     while not done:
         # ----------- EVENT LISTENER
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                done = True
+
+        # End-game listener
+        # TODO: WIN CONDITION - collect 100 blocks
+        if score == num_blocks:
+            # Indicate to draw a message
+            game_state = "won"
+
+            # SET THE TIME THAT THE GAME WAS WON
+            if time_ended == 0:
+                time_ended = time.time()
+
+            # Set parameters to keep the screen alive
+            # Wait 4 seconds to kill the screen
+            if time.time() - time_ended >= endgame_cooldown:
+                done = True
+
+        # TODO: Lose condition - Player hp goes below zero
+        if player.hp_remaining() <= 0:
+            game_state = "lose"
+
+            # SET THE TIME THAT THE GAME WAS WON
+            if time_ended == 0:
+                time_ended = time.time()
+
+            # Set parameters to keep the screen alive
+            # Wait 4 seconds to kill the screen
+            if time.time() - time_ended >= endgame_cooldown:
                 done = True
 
         # ----------- CHANGE ENVIRONMENT
@@ -205,7 +245,7 @@ def main() -> None:
         enemies_collided = pygame.sprite.spritecollide(player, enemy_sprites, False)
 
         # Set a time for invincibility at the beginning of the game
-        if time.time() - time_start > time_invincible:
+        if time.time() - time_start > time_invincible and game_state != "won":
             for enemy in enemies_collided:
                 player.hp -= 1
 
@@ -214,6 +254,8 @@ def main() -> None:
 
             for block in blocks_collided:
                 score += 1
+
+        # print game instructions
 
         # ----------- DRAW THE ENVIRONMENT
         screen.fill(BGCOLOUR)      # fill with bgcolor
@@ -227,13 +269,34 @@ def main() -> None:
             (5, 5)
         )
 
+        # Print Game Instructions
+        if time.time() - time_start < time_invincible:
+            screen.blit(
+                font.render(instructions, True, BLACK),
+                (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+            )
+
         # Draw a health bar
         # Draw the background rectangle
         pygame.draw.rect(screen, GREEN, [580, 5, 215, 20])
+
         # Draw the foreground rectangle which is the remaining health
         life_remaining = 215 - int(215 * player.hp_remaining())
         pygame.draw.rect(screen, BLUE, [580, 5, life_remaining, 20])
 
+        # If we have won, draw the text on the screen
+        if game_state == "won":
+            screen.blit(
+                font.render(endgame_messages["win"], True, BLACK),
+                (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+            )
+
+        # If we have won, draw the text on the screen
+        if game_state == "lose":
+            screen.blit(
+                font.render(endgame_messages["lose"], True, BLACK),
+                (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+            )
 
         # Update the screen
         pygame.display.flip()
