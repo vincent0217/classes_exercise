@@ -131,6 +131,11 @@ def main() -> None:
     game_state = "running"
     endgame_cooldown = 5            # seconds
     time_ended = 0.0
+
+    # Check for high score
+    with open("./data/shootemup_highscore.txt") as f:
+        high_score = int(f.readline().strip())
+
     endgame_messages = {
         "win": "Congratulations, you won!",
         "lose": "Sorry, they got you. Play again!",
@@ -146,9 +151,11 @@ def main() -> None:
     for i in range(num_enemies):
         # Create an enemy
         enemy = Enemy()
+
         # Add it to the sprites list (enemy_sprites and all_sprites)
         enemy_sprites.add(enemy)
         all_sprites.add(enemy)
+
     # Create the Player block
     player = Player()
     # Add the Player to all_sprites group
@@ -170,15 +177,31 @@ def main() -> None:
         # TODO: LOSE CONDITION - Player's hp goes below 0
         if player.hp_remaining() <= 0:
             done = True
+
         # ----------- CHANGE ENVIRONMENT
         # Process player movement based on mouse pos
         mouse_pos = pygame.mouse.get_pos()
         player.rect.x = mouse_pos[0] - player.rect.width / 2
         player.rect.y = mouse_pos[1] - player.rect.height / 2
+
+        # Check number of enemies currently on the screen
+        if len(enemy_sprites) < 1:
+            for i in range(num_enemies):
+                # Create an enemy
+                enemy = Enemy()
+
+                # Add it to the sprites list (enemy_sprites and all_sprites)
+                enemy_sprites.add(enemy)
+                all_sprites.add(enemy)
+
+            num_enemies += 5
+
         # Update the location of all sprites
         all_sprites.update()
+
         # Check all collisions between player and the ENEMIES
         enemies_collided = pygame.sprite.spritecollide(player, enemy_sprites, False)
+
         # Set a time for invincibility at the beginning of the game
         if time.time() - time_start > time_invincible and game_state != "won":
             for enemy in enemies_collided:
@@ -206,6 +229,7 @@ def main() -> None:
 
         # Draw all sprites
         all_sprites.draw(screen)
+
         # Draw the score on the screen
         screen.blit(
             font.render(f"Score: {score}", True, BLACK),
@@ -214,9 +238,11 @@ def main() -> None:
         # Draw a health bar
         # Draw the background rectangle
         pygame.draw.rect(screen, GREEN, [580, 5, 215, 20])
+
         # Draw the foreground rectangle which is the remaining health
         life_remaining = 215 - int(215 * player.hp_remaining())
         pygame.draw.rect(screen, BLUE, [580, 5, life_remaining, 20])
+
         # If we've won, draw the text on the screen
         if game_state == "won":
             screen.blit(
@@ -227,6 +253,18 @@ def main() -> None:
         pygame.display.flip()
         # ----------- CLOCK TICK
         clock.tick(75)
+
+    # Clean-up
+
+    # Update the high score if the current score is the highest
+    with open("./data/shootemup_highscore.txt") as f:
+        high_score = int(f.readline().strip())
+
+    with open("./data/shootemup_highscore.txt", "w") as f:
+        if score > high_score:
+            f.write(str(score))
+        else:
+            f.write(str(high_score))
 
 
 if __name__ == "__main__":
